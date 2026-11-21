@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PLinkageApp.AppShellWindows"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewsCommon="clr-namespace:PLinkageApp.Views"
+    xmlns:viewsWindows="clr-namespace:PLinkageApp.ViewsWindows"
+    Title="PLinkage"
+    Shell.FlyoutBehavior="Flyout">
+
+    <Shell.FlyoutHeader>
+        <StackLayout Padding="10" Spacing="10">
+            <Image
+                HeightRequest="100"
+                HorizontalOptions="Center"
+                Source="plinkage.png"
+                WidthRequest="100" />
+            <Label
+                HorizontalTextAlignment="Center"
+                FontAttributes="Bold"
+                FontSize="16"
+                HorizontalOptions="Center"
+                Text="{Binding WelcomeMessage}" />
+            <Label
+                FontSize="14"
+                HorizontalOptions="Center"
+                Text="{Binding UserRoleMessage}" />
+            <Button
+                BackgroundColor="Red"
+                Command="{Binding LogoutCommand}"
+                CornerRadius="10"
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsLoggedIn}"
+                Text="Logout"
+                TextColor="White"
+                WidthRequest="100" />
+        </StackLayout>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem
+        FlyoutItemIsVisible="False"
+        Route="AuthWrapper"
+        Shell.TabBarIsVisible="False">
+        <ShellContent
+            Title="Start"
+            ContentTemplate="{DataTemplate viewsCommon:BlankPage}"
+            Route="StartView" />
+
+        <ShellContent
+            Title="Login"
+            ContentTemplate="{DataTemplate viewsWindows:LoginView}"
+            Route="LoginView" />
+    </FlyoutItem>
+
+</Shell>
