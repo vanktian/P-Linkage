@@ -1,0 +1,581 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
+
+		<!-- Note for MacCatalyst:
+		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
+		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
+		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
+		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+
+		<OutputType>Exe</OutputType>
+		<RootNamespace>PLinkageApp</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Display name -->
+		<ApplicationTitle>PLinkage</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.cuadravan.plinkage</ApplicationId>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
+		<WindowsPackageType>None</WindowsPackageType>
+
+		
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
+		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" /> -->
+		<MauiIcon Include="Resources\AppIcon\appiconplinkage.svg" />
+
+		<!-- Splash Screen -->
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
+		<MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Color="#FFFFFF" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\AppIcon\appiconplinkage.svg" />
+	  <None Remove="Resources\Splash\splashscreen.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="FuzzySharp" Version="2.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.10" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.110" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PLinkageShared\PLinkageShared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="AppShellWindows.xaml.cs">
+	    <DependentUpon>AppShellWindows.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views To use\AdminViewProjectOwnerProfileView.xaml.cs">
+	    <DependentUpon>AdminViewProjectOwnerProfileView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\ProjectOwnerViews\ProcessResignationView.xaml.cs">
+	    <DependentUpon>ProcessResignationView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\ProjectOwnerViews\SendOfferView.xaml.cs">
+	    <DependentUpon>SendOfferView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\AddEducationView.xaml.cs">
+	    <DependentUpon>AddEducationView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\ApplyView.xaml.cs">
+	    <DependentUpon>ApplyView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\NegotiatingOfferView.xaml.cs">
+	    <DependentUpon>NegotiatingOfferView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\ResignProjectView.xaml.cs">
+	    <DependentUpon>ResignProjectView.xaml</DependentUpon>
+     </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\SentApplicationsHistoryView.xaml.cs">
+	    <DependentUpon>SentApplicationsHistoryView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\SentApplicationsPendingView.xaml.cs">
+	    <DependentUpon>SentApplicationsPendingView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\UpdateEducationView.xaml.cs">
+	    <DependentUpon>UpdateEducationView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\GeneralViews\ViewSkillView.xaml.cs">
+	    <DependentUpon>ViewSkillView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\UpdateSkillView.xaml.cs">
+	    <DependentUpon>UpdateSkillView.xaml</DependentUpon>
+    </Compile>
+	  <Compile Update="Views\ViewsAndroid\GeneralViews\BrowseSkillProviderView.xaml.cs">
+	    <DependentUpon>BrowseSkillProviderView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\GeneralViews\BrowseProjectView.xaml.cs">
+	    <DependentUpon>BrowseProjectView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\RegisterViews\RegisterView5.xaml.cs">
+	    <DependentUpon>RegisterView5.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\RegisterViews\RegisterView4.xaml.cs">
+	    <DependentUpon>RegisterView4.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\RegisterViews\RegisterView3.xaml.cs">
+	    <DependentUpon>RegisterView3.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\RegisterViews\RegisterView2.xaml.cs">
+	    <DependentUpon>RegisterView2.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\RegisterViews\RegisterView1.xaml.cs">
+	    <DependentUpon>RegisterView1.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\LogoutView.xaml.cs">
+	    <DependentUpon>LogoutView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\SkillProviderHomeView.xaml.cs">
+	    <DependentUpon>SkillProviderHomeView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\GeneralViews\MessagesView.xaml.cs">
+	    <DependentUpon>MessagesView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\SkillProviderViews\AddSkillView.xaml.cs">
+	    <DependentUpon>AddSkillView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsAndroid\GeneralViews\ViewSkillProviderProfileView.xaml.cs">
+	    <DependentUpon>ViewSkillProviderProfileView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\GeneralViews\ChatWindowsView.xaml.cs">
+	    <DependentUpon>ChatWindowsView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\GeneralViews\BrowseSkillProviderView.xaml.cs">
+	    <DependentUpon>BrowseSkillProviderView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\GeneralViews\BrowseProjectView.xaml.cs">
+	    <DependentUpon>BrowseProjectView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\GeneralViews\UpdateProfileView.xaml.cs">
+	    <DependentUpon>UpdateProfileView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\LoginView.xaml.cs">
+	    <DependentUpon>LoginView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\ProjectOwnerViews\AddProjectView.xaml.cs">
+	    <DependentUpon>AddProjectView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerBrowseSkillProviderView.xaml.cs">
+	    <DependentUpon>ProjectOwnerBrowseSkillProviderView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\ProjectOwnerViews\RateSkillProviderView.xaml.cs">
+	    <DependentUpon>RateSkillProviderView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\ProjectOwnerViews\SendOfferView.xaml.cs">
+	    <DependentUpon>SendOfferView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerLinkagesView.xaml.cs">
+	    <DependentUpon>ProjectOwnerLinkagesView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\ProjectOwnerViews\UpdateProjectView.xaml.cs">
+	    <DependentUpon>UpdateProjectView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\SkillProviderViews\AddSkillView.xaml.cs">
+	    <DependentUpon>AddSkillView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\SkillProviderViews\AddEducationView.xaml.cs">
+	    <DependentUpon>AddEducationView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\SkillProviderViews\ApplyView.xaml.cs">
+	    <DependentUpon>ApplyView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\SkillProviderViews\SkillProviderMessagesView.xaml.cs">
+	    <DependentUpon>SkillProviderMessagesView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\GeneralViews\ViewProjectView.xaml.cs">
+	    <DependentUpon>ViewProjectView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\GeneralViews\ViewSkillProviderProfileView.xaml.cs">
+	    <DependentUpon>ViewSkillProviderProfileView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsCommon\SkillProviderViews\UpdateEducationView.xaml.cs">
+	    <DependentUpon>UpdateEducationView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\SkillProviderViews\SkillProviderLinkagesView.xaml.cs">
+	    <DependentUpon>SkillProviderLinkagesView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ViewsWindows\SkillProviderViews\SkillProviderUpdateSkillView.xaml.cs">
+	    <DependentUpon>SkillProviderUpdateSkillView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="AppShellAndroid.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\GlobalNamespaces.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\AdminViews\AdminBrowseProjectOwnerView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\BrowseProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\BrowseSkillProviderView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\AdminViews\AdminHomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\ChatView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\LogoutView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\BlankPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SplashScreen.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\LoginView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\ProjectOwnerLinkagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\AddProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\ProjectOwnerProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\RateSkillProviderView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\ProcessResignationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\SendOfferView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\UpdateProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\SkillProviderLinkagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\SkillProviderProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\AddEducationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\ApplyView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\NegotiatingOfferView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\SentApplicationsHistoryView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\SentApplicationsPendingView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\UpdateEducationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\ViewSkillView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\UpdateSkillView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\ProjectOwnerViews\ProjectOwnerHomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\RegisterViews\RegisterView5.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\RegisterViews\RegisterView4.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\RegisterViews\RegisterView3.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\RegisterViews\RegisterView2.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\RegisterViews\RegisterView1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\SkillProviderHomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\MessagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\SkillProviderViews\AddSkillView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\UpdateProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\ViewProjectOwnerProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\ViewProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsAndroid\GeneralViews\ViewSkillProviderProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\AdminViews\AdminBrowseProjectOwnerView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\GeneralViews\BrowseProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\GeneralViews\BrowseSkillProviderView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\AdminViews\AdminHomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\AdminViewProjectOwnerProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\AdminViewProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\AdminViewSkillProviderProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\BlankPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\GeneralViews\ChatWindowsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\BlankPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\MessagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\ViewSkillView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\AddProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\ProjectOwnerViews\ProcessResignationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerBrowseSkillProviderView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerHomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerMessagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerLinkagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\ProjectOwnerViews\RateSkillProviderView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\ProjectOwnerSendMessageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\ProjectOwnerViews\SendOfferView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\UpdateProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\ProjectOwnerViews\UpdateProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\GeneralViews\ViewProjectOwnerProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\GeneralViews\ViewProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\GeneralViews\ViewSkillProviderProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\RegisterViews\RegisterView1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\RegisterViews\RegisterView2.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\RegisterViews\RegisterView3.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\RegisterViews\RegisterView4.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\GeneralViews\RegisterViews\RegisterView5.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\SkillProviderViews\AddEducationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\SkillProviderViews\AddSkillView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\SkillProviderViews\NegotiatingOfferView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\SkillProviderViews\ResignProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\SkillProviderViews\ApplyView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\SkillProviderViews\SkillProviderBrowseProjectsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\SkillProviderViews\SkillProviderHomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\SkillProviderViews\SkillProviderLinkagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\SkillProviderViews\SkillProviderProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\SkillProviderSendMessageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\SkillProviderViews\SkillProviderMessagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsCommon\SkillProviderViews\UpdateEducationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\SkillProviderUpdateProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewsWindows\SkillProviderViews\SkillProviderUpdateSkillView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\SkillProviderViewProjectOwnerProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views To use\SkillProviderViewProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\ChatPreviewCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\FilterButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\InfoBanner.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\InformationCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabeledDatePicker.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabeledEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabeledLabel.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabeledPickerNonBrowse.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\LabelledPicker.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\OfferApplicationCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\ProfileEducationCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\ProfileProjectCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\ProjectCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\ProjectOwnerCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\RateSkillProviderCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\ResignSkillProviderCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\SearchFilterBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\SearchInput.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\SkillPill.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\SkillProviderCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\StatCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\UserProfileCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\Styles\GlobalNamespaces.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+</Project>

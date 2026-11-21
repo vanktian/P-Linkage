@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PLinkageApp.AppShellAndroid"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewsAndroid="clr-namespace:PLinkageApp.ViewsAndroid"
+    xmlns:viewsCommon="clr-namespace:PLinkageApp.Views"
+    Title="PLinkage"
+    Shell.FlyoutBehavior="Disabled">
+
+
+    <ShellContent
+        Title="Start"
+        ContentTemplate="{DataTemplate viewsCommon:BlankPage}"
+        Route="StartView" />
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate viewsAndroid:LoginView}"
+        Route="LoginView" />
+    <TabBar
+        x:Name="MainTabBar"
+        Shell.TabBarBackgroundColor="#7C4DFF"
+        Shell.TabBarForegroundColor="#FFFFFF"
+        Shell.TabBarTitleColor="#FFFFFF"
+        Shell.TabBarUnselectedColor="#D1D5DB" />
+
+
+</Shell>

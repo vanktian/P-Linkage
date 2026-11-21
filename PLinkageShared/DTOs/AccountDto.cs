@@ -1,0 +1,40 @@
+﻿using PLinkageShared.Enums;
+
+namespace PLinkageShared.DTOs
+{
+    public class LoginRequestDto
+    {
+        public string UserEmail { get; set; } = string.Empty;
+        public string UserPassword { get; set; } = string.Empty;
+    }
+
+    public class LoginResultDto
+    {
+        public Guid UserId { get; set; } = Guid.Empty;
+        public UserRole? UserRole { get; set; } = null;
+        public string UserName { get; set; } = null;
+        public CebuLocation? UserLocation { get; set; } = null;
+        public string Message { get; set; } = string.Empty;
+    }
+
+    public class RegisterUserDto
+    {
+        public string UserFirstName { get; set; } = string.Empty;
+        public string UserLastName { get; set; } = string.Empty;
+        public string UserEmail { get; set; } = string.Empty;
+        public string UserPassword { get; set; } = string.Empty;
+        public string UserPhone { get; set; } = string.Empty;
+        public CebuLocation? UserLocation { get; set; } = null;
+        public DateTime UserBirthDate { get; set; } = DateTime.Now;
+        public string UserGender { get; set; } = string.Empty;
+        public UserRole? UserRole { get; set; } = null;
+        public DateTime JoinedOn { get; set; } = DateTime.Now;
+    }
+
+    public class ChangePasswordDto
+    {
+        public Guid UserId { get; set; } = Guid.Empty;
+        public UserRole? UserRole { get; set; } = null;
+        public string NewPassword { get; set; } = string.Empty;
+    }
+}
