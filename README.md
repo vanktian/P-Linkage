@@ -1,5 +1,5 @@
 # PLinkage [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
-[![Build and deploy .NET Core application to Web App PLinkageAPI](https://github.com/cuadravan/PLinkage/actions/workflows/PLinkageAPI.yml/badge.svg)](https://github.com/cuadravan/PLinkage/actions/workflows/PLinkageAPI.yml)
+[![Build and deploy .NET Core application to Web App PLinkageAPI](https://github.com/vanktian/P-Linkage/actions/workflows/PLinkageAPI.yml/badge.svg)](https://github.com/vanktian/P-Linkage/actions/workflows/PLinkageAPI.yml)
 
 *Project Linkage/Collaboration Application*
 
@@ -172,7 +172,7 @@ Follow these steps to build and run the **.NET MAUI Client** on your local machi
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/cuadravan/PLinkage.git
+    git clone https://github.com/vanktian/P-Linkage.git
     ```
 
 2.  **Open the Solution**
